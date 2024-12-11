@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/app_toast.dart';
 import '../data/models/photo_model.dart';
 import '../data/repository/photo_repository.dart';
 
@@ -21,6 +22,20 @@ class PhotoProvider with ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> downLoadPhotos(String url) async {
+    try {
+      bool isDownloaded = await _repository.downloadImage(url);
+
+      if (isDownloaded) {
+        AppToast().showSuccessToast("Image downloaded successfully");
+      } else {
+        AppToast().showErrorToast("Image download failed");
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
